@@ -55,6 +55,8 @@ class file_movie(devedeng.interface_manager.interface_manager):
             self.add_toggle("show_in_menu", True)
         else:
             self.original_aspect_ratio = 1.777 # dummy value
+            
+        self.add_text("chapter_list_entry", None);
 
         self.add_dualtoggle("format_pal","format_ntsc",self.config.PAL)
         self.add_toggle("video_rate_automatic", True)
@@ -107,7 +109,7 @@ class file_movie(devedeng.interface_manager.interface_manager):
 
         self.add_show_hide("format_pal", ["size_pal"], ["size_ntsc"])
 
-        self.add_enable_disable("divide_in_chapters", ["chapter_size_spinbutton"], [])
+        self.add_enable_disable("divide_in_chapters", ["chapter_size_spinbutton", "chapter_list_entry"], [])
         self.add_enable_disable("video_rate_automatic", [], ["video_spinbutton"])
         self.add_enable_disable("audio_rate_automatic", [], ["audio_spinbutton"])
         self.add_enable_disable("sound5_1", ["copy_sound"], [])
@@ -143,8 +145,8 @@ class file_movie(devedeng.interface_manager.interface_manager):
                 self.error = True
             else:
                 self.error = False
-                self.audio_list = film_analizer.audio_list
-                self.video_list = film_analizer.video_list
+                self.audio_list = film_analizer.audio_list[:]
+                self.video_list = film_analizer.video_list[:]
                 self.audio_streams = film_analizer.audio_streams
                 self.video_streams = film_analizer.video_streams
                 self.original_width = film_analizer.original_width
@@ -405,6 +407,10 @@ class file_movie(devedeng.interface_manager.interface_manager):
     def delete_file(self):
 
         return
+
+    def on_help_clicked(self,b):
+    
+        help_file = devedeng.help.help("file.html")
 
 
     def properties(self):

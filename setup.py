@@ -3,7 +3,11 @@
 import os
 from glob import glob
 from distutils.core import setup
-from distutils import dep_util
+
+try:
+    from distutils import dep_util
+except:
+    pass
 
 def get_data_files():
     data_files = [
@@ -15,7 +19,7 @@ def get_data_files():
         (os.path.join('share', 'devede_ng'), ['data/codepages.lst']),
         (os.path.join('share', 'devede_ng'), ['data/languages.lst']),
         (os.path.join('share', 'devede_ng', 'backgrounds'), glob('data/pixmaps/backgrounds/*')),
-        (os.path.join('share', 'doc', 'devede_ng', 'html'), glob('docs/html/*'))
+        (os.path.join('share', 'doc', 'devede_ng', 'html'), glob('doc/*'))
     ]
 
     for lang_name in [f for f in os.listdir('locale')]:
@@ -28,7 +32,7 @@ def get_data_files():
 
 
 def compile_translations():
-    
+
     try:
         for pofile in [f for f in os.listdir('po') if f.endswith('.po')]:
             pofile = os.path.join('po', pofile)
@@ -36,17 +40,14 @@ def compile_translations():
             lang = os.path.basename(pofile)[:-3] # len('.po') == 3
             modir = os.path.join('locale', lang, 'LC_MESSAGES') # e.g. locale/fr/LC_MESSAGES/
             mofile = os.path.join(modir, 'devede_ng.mo') # e.g. locale/fr/LC_MESSAGES/devede_ng.mo
-    
+
             # create an architecture for these locales
             if not os.path.isdir(modir):
                 os.makedirs(modir)
-    
+
             if not os.path.isfile(mofile) or dep_util.newer(pofile, mofile):
-                print('compiling %s' % mofile)
                 # msgfmt.make(pofile, mofile)
                 os.system("msgfmt \"" + pofile + "\" -o \"" + mofile + "\"")
-            else:
-                print('skipping %s - up to date' % mofile)
     except:
         pass
 
@@ -57,7 +58,7 @@ compile_translations()
 setup(
     name='devedeng',
 
-    version='4.0',
+    version='4.3',
 
     description='A video DVD creator',
     long_description = "A program that allows to create video DVDs",

@@ -38,6 +38,7 @@ import devedeng.vcdimager_converter
 import devedeng.shutdown
 import devedeng.about
 import devedeng.opensave
+import devedeng.help
 
 class devede_project:
 
@@ -211,6 +212,15 @@ class devede_project:
             if element == obj:
                 item.model.set_value(item.iter,1,new_title)
         self.refresh_disc_usage()
+
+
+    def on_help_clicked(self,b):
+        
+        help_file = devedeng.help.help("main.html")
+
+    def on_help_index_activate(self,b):
+        
+        help_file = devedeng.help.help("index.html")
 
 
     def on_add_file_clicked(self,b):
@@ -525,8 +535,12 @@ class devede_project:
                 start_with_menu = True
             else:
                 start_with_menu = False
+            if (self.menu.play_all == "menu_play_all"):
+                play_all_opt = True
+            else:
+                play_all_opt = False
             dvdauthor = devedeng.dvdauthor_converter.dvdauthor_converter()
-            dvdauthor.create_dvd_project(data.path, data.name, file_movies, menu_entries, start_with_menu)
+            dvdauthor.create_dvd_project(data.path, data.name, file_movies, menu_entries, start_with_menu, play_all_opt)
             # dvdauthor must wait until all the files have been converted
             for element in final_dependencies:
                 dvdauthor.add_dependency(element)
